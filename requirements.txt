@@ -7,3 +7,6 @@ streamlit
 plotly
 jupyter
 python-dotenv
+matplotlib
+openai
+ollama
