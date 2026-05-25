@@ -1,12 +1,8 @@
 pandas
 sqlalchemy
 langchain
-langchain-community
 langchain-ollama
+langsmith
 streamlit
-plotly
-jupyter
-python-dotenv
 matplotlib
-openai
-ollama
+python-dotenv
