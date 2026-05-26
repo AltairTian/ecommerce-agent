@@ -8,7 +8,7 @@
 - **本地模型**: Ollama (qwen3:8b)
 - **前端**: Streamlit
 - **数据库**: SQLite (巴西 Olist 电商数据集)
-- **可观测性**: LangSmith Trace
+- **调试**: LangSmith Trace
 
 ## 项目结构
 
