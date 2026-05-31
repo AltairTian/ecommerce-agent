@@ -12,7 +12,7 @@ from langsmith import traceable
 
 from config.llm import llm
 from src.tools import tools
-from src.prompts import SYSTEM_PROMPT
+from src.agent.prompts import SYSTEM_PROMPT
 
 # Agent 实例（模块级别单例）
 agent = create_agent(

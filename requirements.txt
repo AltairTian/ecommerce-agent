@@ -6,3 +6,12 @@ langsmith
 streamlit
 matplotlib
 python-dotenv
+
+# FastAPI
+fastapi
+uvicorn[standard]
+python-multipart
+
+# RAG
+chromadb
+sentence-transformers

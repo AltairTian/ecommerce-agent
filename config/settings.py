@@ -30,6 +30,17 @@ LANGSMITH_ENDPOINT = os.getenv("LANGSMITH_ENDPOINT")
 LANGSMITH_API_KEY = os.getenv("LANGSMITH_API_KEY")
 LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT")
 
+# FastAPI
+API_HOST = os.getenv("API_HOST", "127.0.0.1")
+API_PORT = int(os.getenv("API_PORT", "8000"))
+
+# RAG
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
+VECTOR_DB_PATH = PROJECT_ROOT / os.getenv("VECTOR_DB_PATH", "src/rag/vector_db")
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "100"))
+RAG_TOP_K = int(os.getenv("RAG_TOP_K", "5"))
+
 
 def print_config() -> None:
     """调试用：打印当前配置。"""
@@ -39,3 +50,10 @@ def print_config() -> None:
     print("CHART_DIR:", CHART_DIR)
     print("LANGSMITH_TRACING:", LANGSMITH_TRACING)
     print("LANGSMITH_PROJECT:", LANGSMITH_PROJECT)
+    print("API_HOST:", API_HOST)
+    print("API_PORT:", API_PORT)
+    print("EMBEDDING_MODEL:", EMBEDDING_MODEL)
+    print("VECTOR_DB_PATH:", VECTOR_DB_PATH)
+    print("CHUNK_SIZE:", CHUNK_SIZE)
+    print("CHUNK_OVERLAP:", CHUNK_OVERLAP)
+    print("RAG_TOP_K:", RAG_TOP_K)

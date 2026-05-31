@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import streamlit as st
 
-from src.agent import run_agent
+from src.agent.agent import run_agent
 from src.tools.charts import (
     plot_monthly_gmv,
     plot_top_categories,
