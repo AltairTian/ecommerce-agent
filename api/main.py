@@ -5,12 +5,22 @@ FastAPI 应用入口 —— 电商数据分析 Agent 的 API 服务。
     uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
 """
 
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.middleware.logging import RequestLoggingMiddleware
+from api.middleware.error_handler import generic_exception_handler
 from api.routes import health, chat, reports
+
+# 配置日志格式
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(name)s] %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
 
 # ── 应用生命周期 ────────────────────────────────────
@@ -48,6 +58,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── 请求日志中间件 ────────────────────────────────
+
+app.add_middleware(RequestLoggingMiddleware)
+
+# ── 全局异常处理器 ────────────────────────────────
+
+app.add_exception_handler(Exception, generic_exception_handler)
 
 
 # ── 注册路由 ────────────────────────────────────────
