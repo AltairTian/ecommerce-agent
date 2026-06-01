@@ -6,6 +6,7 @@ FastAPI 应用入口 —— 电商数据分析 Agent 的 API 服务。
 """
 
 import logging
+import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -28,8 +29,10 @@ logging.basicConfig(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """应用启动/关闭时的资源管理。"""
-    # 启动时：验证配置、预热连接等
+    # 启动时：记录启动时间、打印配置
     from config.settings import print_config
+    from api.routes.health import set_start_time
+    set_start_time(time.time())
     print_config()
     yield
     # 关闭时：清理资源（数据库连接池、向量存储等）
