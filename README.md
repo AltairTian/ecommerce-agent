@@ -14,7 +14,7 @@
 
 ## 项目结构
 
-```
+```text
 ├── api/                       # FastAPI 接口层
 │   ├── main.py                # 应用入口，路由注册
 │   ├── middleware/             # 中间件（CORS、日志等）
@@ -89,7 +89,7 @@ cp .env.example .env
 
 编辑 `.env`，填入你的 LangSmith API Key（可选，用于 Trace 监控）：
 
-```
+```ini
 OLLAMA_MODEL=qwen3:8b
 OLLAMA_BASE_URL=http://127.0.0.1:11434
 LANGSMITH_API_KEY=your_key_here
@@ -144,6 +144,52 @@ python tests/test_agent_cases.py      # Agent 集成测试（需要 Ollama 运�
 - "哪个品类销售额最高？"
 - "平均配送时长和延迟配送率是多少？"
 - "请生成一份完整的电商经营分析报告"
+
+### API 调用示例
+
+```bash
+# 健康检查
+curl http://127.0.0.1:8000/api/health
+
+# Agent 对话
+curl -X POST http://127.0.0.1:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"question": "总GMV是多少？"}'
+
+# RAG 增强对话
+curl -X POST http://127.0.0.1:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"question": "什么是GMV？", "use_rag": true}'
+
+# 生成报告
+curl http://127.0.0.1:8000/api/reports/daily
+```
+
+## RAG 知识库
+
+### 准备工作
+
+1. 在 `src/rag/knowledge_base/` 下放置 `.md` 或 `.txt` 文档
+2. 首次运行需要下载 Sentence-Transformers 嵌入模型（~80MB），如遇网络问题可设置代理：
+   ```bash
+   set HTTPS_PROXY=http://127.0.0.1:7890   # Windows
+   export HTTPS_PROXY=http://127.0.0.1:7890  # Linux/Mac
+   ```
+
+### 摄入文档
+
+```python
+from src.rag.ingestion import ingest_all
+ingest_all()  # 扫描 knowledge_base/，分块、向量化、存入 ChromaDB（自动跳过已摄入文件）
+```
+
+### 测试检索
+
+```python
+from src.rag.retriever import retrieve, retrieve_as_context
+results = retrieve("什么是GMV？")
+print(retrieve_as_context("复购率"))
+```
 
 ## Agent 能力
 
