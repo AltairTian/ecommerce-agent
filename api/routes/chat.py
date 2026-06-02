@@ -5,6 +5,7 @@ import logging
 from fastapi import APIRouter, HTTPException
 
 from src.agent.agent import run_agent, run_agent_with_history
+from src.rag.retriever import retrieve_as_context
 from src.schemas.chat import ChatRequest, ChatResponse
 
 logger = logging.getLogger("api")
@@ -26,10 +27,20 @@ async def chat(req: ChatRequest):
 
     try:
         if req.use_rag:
-            # TODO: Phase 3 — 替换为 RAG 增强调用
-            logger.info("RAG mode requested but not yet available, falling back to default")
-            answer = _call_agent(question, req.history)
-            mode = "default (rag fallback)"
+            # 预检索知识库，注入上下文到用户问题
+            rag_context = retrieve_as_context(question, top_k=3)
+            if rag_context:
+                enhanced_question = (
+                    f"【知识库上下文】\n{rag_context}\n\n"
+                    f"【用户问题】\n{question}"
+                )
+                logger.info("RAG mode: injected context (%d chars)", len(rag_context))
+            else:
+                enhanced_question = question
+                logger.info("RAG mode: no relevant context found in knowledge base")
+
+            answer = _call_agent(enhanced_question, req.history)
+            mode = "rag"
         elif req.history:
             answer = run_agent_with_history(question, req.history)
             mode = "multi_turn"

@@ -49,6 +49,8 @@ from src.tools.charts import (
     plot_payment_value_distribution,
 )
 
+from src.tools.rag_tools import search_knowledge_base
+
 
 def _df_to_text(df, max_rows: int = 10) -> str:
     if df is None:
@@ -259,6 +261,24 @@ def plot_payment_value_distribution_tool() -> str:
     return plot_payment_value_distribution()
 
 
+# ── RAG 检索工具 ──────────────────────────────────
+
+
+@tool
+def rag_search_tool(query: str) -> str:
+    """在电商知识库中搜索概念定义、业务规则或分析方法。
+
+    适用场景：
+    - 用户询问某个指标的定义（如"GMV是什么意思"）
+    - 用户询问业务规则（如"延迟配送如何判断"）
+    - 用户询问分析方法（如"如何做归因分析"）
+
+    Args:
+        query: 搜索关键词或问题。
+    """
+    return search_knowledge_base(query, top_k=3)
+
+
 # ── 统一工具列表（唯一来源）───────────────────────
 
 tools = [
@@ -294,4 +314,5 @@ tools = [
     plot_monthly_orders_tool,
     plot_payment_type_distribution_tool,
     plot_payment_value_distribution_tool,
+    rag_search_tool,
 ]
